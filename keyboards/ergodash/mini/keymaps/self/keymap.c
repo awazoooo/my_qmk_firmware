@@ -19,7 +19,7 @@ enum custom_keycodes {
 #define CTL_ENT CTL_T(KC_ENT)
 #define OSM_LALT OSM(MOD_LALT)
 #define OSM_LSFT OSM(MOD_LSFT)
-#define OSM_LALT OSM(MOD_LALT)
+#define OSM_LCTL OSM(MOD_LCTL)
 #define OSM_RALT OSM(MOD_RALT)
 #define OSL_LOWER OSL(_LOWER)
 #define OSL_RAISE OSL(_RAISE)
@@ -40,8 +40,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    */
   [_QWERTY] = LAYOUT( \
     KC_TAB,  KC_Q,   KC_W,     KC_E,    KC_R,    KC_T,     KC_MINS,                      KC_EQL,   KC_Y,     KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS, \
-    KC_LCTL, KC_A,   KC_S,     KC_D,    KC_F,    KC_G,     KC_LBRC,                     KC_RBRC,   KC_H,     KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, \
-    KC_LSFT, KC_Z,   KC_X,     KC_C,    KC_V,    KC_B,     KC_ESC,                      KC_BSPACE, KC_N,     KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT, \
+    OSM_LCTL, KC_A,   KC_S,     KC_D,    KC_F,    KC_G,     KC_LBRC,                     KC_RBRC,   KC_H,     KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, \
+    OSM_LSFT, KC_Z,   KC_X,     KC_C,    KC_V,    KC_B,     KC_ESC,                      KC_BSPACE, KC_N,     KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT, \
     RESET,   ADJUST, OSM_LALT, KC_LCMD,          OSM_LSFT, OSL_LOWER, CTL_SPC, CTL_ENT, OSL_RAISE, OSM_RALT, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT \
   ),
 
@@ -60,7 +60,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_LOWER] = LAYOUT(
     KC_GRV , KC_EXLM, KC_AT,    KC_HASH, KC_DLR,  KC_PERC,  KC_UNDS,                     KC_PLUS,   KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE, \
     KC_TILD, KC_F1,   KC_F2,    KC_F3,   KC_F4,   KC_F5,    KC_LCBR,                     KC_RCBR,   KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_DQT, \
-    KC_LSFT, KC_F6,   KC_F7,    KC_F8,   KC_F9,   KC_F10,   KC_ESC,                      KC_BSPACE, KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_RSFT, \
+    OSM_LSFT, KC_F6,   KC_F7,    KC_F8,   KC_F9,   KC_F10,   KC_ESC,                      KC_BSPACE, KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_RSFT, \
     KC_NO,   KC_NO,   OSM_LALT, KC_LCMD,          OSM_LSFT, OSL_LOWER, CTL_SPC, CTL_ENT, OSL_RAISE, KC_LT,            KC_COMM, KC_DOT,  KC_GT,   KC_SLSH \
   ),
 
@@ -79,7 +79,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_RAISE] = LAYOUT(
     KC_GRV,  KC_EXLM, KC_AT,  KC_HASH, KC_DLR, KC_PERC,  KC_UNDS,                     KC_PLUS,   KC_CIRC,  KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE, \
     KC_TILD, KC_F1,   KC_F2,  KC_F3,   KC_F4,  KC_F5,    KC_LCBR,                     KC_RCBR,   KC_LEFT,  KC_DOWN, KC_UP,   KC_RGHT, KC_COLN, KC_DQT, \
-    KC_LSFT, KC_F6,   KC_F7,  KC_F8,   KC_F9,  KC_F10,   KC_ESC,                      KC_BSPACE, KC_N,     KC_M,    KC_LT,   KC_GT,   KC_QUES, KC_RSFT, \
+    OSM_LSFT, KC_F6,   KC_F7,  KC_F8,   KC_F9,  KC_F10,   KC_ESC,                      KC_BSPACE, KC_N,     KC_M,    KC_LT,   KC_GT,   KC_QUES, KC_RSFT, \
     KC_NO,   KC_F11, KC_F12,  KC_LCMD,         OSM_LSFT, OSL_LOWER, CTL_SPC, CTL_ENT, OSL_RAISE, OSM_RALT,          KC_HOME, KC_PGDN, KC_PGUP, KC_END \
   ),
 
