@@ -34,3 +34,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define ONESHOT_TAP_TOGGLE 99999
 #define ONESHOT_TIMEOUT 5000
+
+#define TAPPING_TERM_PER_KEY

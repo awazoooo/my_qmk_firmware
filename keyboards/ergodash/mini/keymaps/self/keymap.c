@@ -136,3 +136,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   }
   return true;
 }
+
+uint16_t get_tapping_term(uint16_t keycode){
+  switch(keycode){
+  case CTL_SPC:
+    return 150;
+  case CTL_ENT:
+    return 150;
+  default:
+    return TAPPING_TERM;
+  }
+}
