@@ -25,6 +25,15 @@ enum custom_keycodes {
 #define OSL_RAISE OSL(_RAISE)
 #define OSL_QWERTY OSL(_QWERTY)
 
+enum {
+  TD_LBRC_LPRN = 0
+};
+
+// Tap Dance
+qk_tap_dance_action_t tap_dance_actions[] = {
+  [TD_LBRC_LPRN] = ACTION_TAP_DANCE_DOUBLE(KC_LBRC, KC_LPRN)
+};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   /* Qwerty
@@ -41,7 +50,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    */
   [_QWERTY] = LAYOUT( \
     KC_TAB,  KC_Q,   KC_W,     KC_E,    KC_R,    KC_T,     KC_MINS,                      KC_EQL,   KC_Y,     KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS, \
-    OSM_LCTL, KC_A,   KC_S,     KC_D,    KC_F,    KC_G,     KC_LBRC,                     KC_RBRC,   KC_H,     KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, \
+    OSM_LCTL, KC_A,   KC_S,     KC_D,    KC_F,    KC_G,     TD(TD_LBRC_LPRN),                     KC_RBRC,   KC_H,     KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, \
     OSM_LSFT, KC_Z,   KC_X,     KC_C,    KC_V,    KC_B,     KC_ESC,                      KC_BSPACE, KC_N,     KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT, \
     RESET,   ADJUST, OSM_LALT, KC_LCMD,          OSM_LSFT, OSL_LOWER, CTL_SPC, CTL_ENT, OSL_RAISE, OSM_RALT, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT \
   ),
