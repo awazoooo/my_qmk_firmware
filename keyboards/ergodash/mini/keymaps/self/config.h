@@ -38,3 +38,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* define tapping term */
 #define TAPPING_TERM 200
 #define TAPPING_TERM_PER_KEY
+
+// for combo
+// #define COMBO_COUNT 1
+// #define COMBO_TERM 200
