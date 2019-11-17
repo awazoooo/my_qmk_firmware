@@ -5,17 +5,16 @@ extern keymap_config_t keymap_config;
 #define _QWERTY 0
 #define _LOWER 1
 #define _RAISE 2
-#define _ADJUST 16
+//#define _ADJUST 16
 
 enum custom_keycodes {
   QWERTY = SAFE_RANGE,
   LOWER,
   RAISE,
-  ADJUST,
+  //  ADJUST,
   RAMEN
 };
 
-#define EISU LALT(KC_GRV)
 #define CTL_SPC CTL_T(KC_SPC)
 #define CTL_ENT CTL_T(KC_ENT)
 #define OSM_LALT OSM(MOD_LALT)
@@ -30,6 +29,8 @@ enum custom_keycodes {
 enum {
   // once CLEAR, twice RESET
   CR_DANCE,
+  // once i, twice *
+  ASTR_DANCE,
   // once [, twice {, thrice (
   LPRN_DANCE,
   // once ], twice }, thrice )
@@ -44,6 +45,24 @@ void dance_CR_finished (qk_tap_dance_state_t *state, void *user_data) {
     clear_oneshot_mods();
   } else {
     reset_keyboard();
+  }
+}
+
+void dance_ASTR_finished (qk_tap_dance_state_t *state, void *user_data) {
+  if (state->count == 2) {
+    register_code(KC_LSFT);
+    register_code(KC_8);
+  } else {
+    register_code(KC_I);
+  }
+}
+
+void dance_ASTR_reset (qk_tap_dance_state_t *state, void *user_data) {
+  if (state->count == 2) {
+    unregister_code(KC_LSFT);
+    unregister_code(KC_8);
+  } else {
+    unregister_code(KC_I);
   }
 }
 
@@ -127,6 +146,7 @@ void dance_PRN_reset (qk_tap_dance_state_t *state, void *user_data) {
 //All tap dance functions would go here. Only showing this one.
 qk_tap_dance_action_t tap_dance_actions[] = {
   [CR_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, dance_CR_finished, NULL),
+  [ASTR_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, dance_ASTR_finished, dance_ASTR_reset),
   [LPRN_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED (dance_PRN_tapped, dance_PRN_finished, dance_PRN_reset),
   [RPRN_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED (dance_PRN_tapped, dance_PRN_finished, dance_PRN_reset)
 };
@@ -160,7 +180,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * ,----------------------------------------------------------------------------------------------------------------------.
    */
   [_QWERTY] = LAYOUT( \
-    KC_TAB,  KC_Q,   KC_W,     KC_E,    KC_R,    KC_T,     KC_MINS,                      KC_EQL,   KC_Y,      KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS, \
+                     KC_TAB,  KC_Q,   KC_W,     KC_E,    KC_R,    KC_T,     KC_MINS,                      KC_EQL,   KC_Y,      KC_U,    TD(ASTR_DANCE),    KC_O,    KC_P,    KC_BSLS, \
     OSM_LCTL, KC_A,   KC_S,     KC_D,    KC_F,    KC_G,    TD(LPRN_DANCE),               TD(RPRN_DANCE),   KC_H,     KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, \
     OSM_LSFT, KC_Z,   KC_X,     KC_C,    KC_V,    KC_B,     KC_ESC,                      KC_BSPACE, KC_N,     KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT, \
     TD(CR_DANCE), RAMEN, OSM_LALT, KC_LCMD,          OSM_LSFT, OSL_LOWER, CTL_SPC, CTL_ENT, OSL_RAISE, OSM_RALT, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT \
@@ -202,63 +222,33 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TILD, KC_F1,   KC_F2,  KC_F3,   KC_F4,  KC_F5,    KC_LCBR,                     KC_RCBR,   KC_LEFT,  KC_DOWN, KC_UP,   KC_RGHT, KC_COLN, KC_DQT, \
     OSM_LSFT, KC_F6,   KC_F7,  KC_F8,   KC_F9,  KC_F10,   KC_ESC,                      KC_BSPACE, KC_N,     KC_M,    KC_LT,   KC_GT,   KC_QUES, KC_RSFT, \
     _______,   KC_F11, KC_F12,  KC_LCMD,         OSM_LSFT, OSL_QWERTY, CTL_SPC, CTL_ENT, OSL_QWERTY, OSM_RALT,          KC_HOME, KC_PGDN, KC_PGUP, KC_END \
-  ),
-
-  /* Adjust
-   * ,----------------------------------------------------------------------------------------------------------------------.
-   * |      | Reset|RGB ON|  MODE|  HUE-|  HUE+|      |                    |      |  SAT-|  SAT+|  VAL-|  VAL+|      |      |
-   * |------+------+------+------+------+------+---------------------------+------+------+------+------+------+------+------|
-   * |      |      |      |      |      |      |      |                    |      |      |      |      |      |      |      |
-   * |------+------+------+------+------+------+---------------------------+------+------+------+------+------+------+------|
-   * |      |      |      |      |      |      |      |                    |      |      |      |      |      |      |      |
-   * |-------------+------+------+------+------+------+------+------+------+------+------+------+------+------+-------------|
-   * |      |      |      |      ||||||||      |      |      ||||||||      |      |      ||||||||      |      |      |      |
-   * ,----------------------------------------------------------------------------------------------------------------------.
-   */
-  [_ADJUST] = LAYOUT(
-    _______, RESET  , RGB_TOG, RGB_MOD, RGB_HUD, RGB_HUI,_______,                       _______, RGB_SAD, RGB_SAI, RGB_VAD, RGB_VAI, _______, _______, \
-    _______, _______, BL_TOGG, BL_BRTG, BL_INC , BL_DEC ,_______,                       _______, _______, _______, _______, _______, _______, _______, \
-    _______, _______, _______, _______, _______, _______,_______,                       _______, _______, _______, _______, _______, _______, _______, \
-    _______, _______, _______, _______,          _______,_______,_______,       _______,_______, _______,          _______, _______, _______, _______  \
   )
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
-    case RAMEN:
-      // print string
-      // TODO: ramen emoji
-      SEND_STRING("ramens is perfect food.");
-      return false;
-      break;
-    case LOWER:
-      if (record->event.pressed) {
-        layer_on(_LOWER);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
-      } else {
-        layer_off(_LOWER);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
-      }
-      return false;
-      break;
-    case RAISE:
-      if (record->event.pressed) {
-        layer_on(_RAISE);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
-      } else {
-        layer_off(_RAISE);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
-      }
-      return false;
-      break;
-    case ADJUST:
-      if (record->event.pressed) {
-        layer_on(_ADJUST);
-      } else {
-        layer_off(_ADJUST);
-      }
-      return false;
-      break;
+  case RAMEN:
+    // print string
+    // TODO: ramen emoji
+    SEND_STRING("ramens is perfect food.");
+    return false;
+    break;
+  case LOWER:
+    if (record->event.pressed) {
+      layer_on(_LOWER);
+    } else {
+      layer_off(_LOWER);
+    }
+    return false;
+    break;
+  case RAISE:
+    if (record->event.pressed) {
+      layer_on(_RAISE);
+    } else {
+      layer_off(_RAISE);
+    }
+    return false;
+    break;
   }
   return true;
 }
