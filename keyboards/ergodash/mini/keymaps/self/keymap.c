@@ -2,6 +2,7 @@
 
 extern keymap_config_t keymap_config;
 
+// layers
 #define _QWERTY 0
 #define _LOWER 1
 #define _RAISE 2
@@ -15,29 +16,28 @@ enum custom_keycodes {
   RAMEN
 };
 
-#define CTL_SPC CTL_T(KC_SPC)
-#define CTL_ENT CTL_T(KC_ENT)
-#define OSM_LALT OSM(MOD_LALT)
-#define OSM_LSFT OSM(MOD_LSFT)
-#define OSM_LCTL OSM(MOD_LCTL)
-#define OSM_RALT OSM(MOD_RALT)
-#define OSL_LOWER OSL(_LOWER)
-#define OSL_RAISE OSL(_RAISE)
-#define OSL_QWERTY OSL(_QWERTY)
-
-// Enums defined for all examples: (for tap dance tutorial)
 enum {
   // once CLEAR, twice RESET
-  CR_DANCE,
+  CLRE_DANCE,
   // once i, twice *
   ASTR_DANCE,
+  // TODO: once -, twice _
+  MINS_DANCE,
+  // TODO: once =, twice +
+  EQL_DANCE,
+  // TODO: once \, twice |
+  BSLS_DANCE,
+  // TODO: once ', twice "
+  QUOT_DANCE,
+  // TODO: once ;, twice :
+  SCLN_DANCE,
   // once [, twice {, thrice (
   LPRN_DANCE,
   // once ], twice }, thrice )
   RPRN_DANCE
 };
 
-void dance_CR_finished (qk_tap_dance_state_t *state, void *user_data) {
+void dance_CLRE_finished (qk_tap_dance_state_t *state, void *user_data) {
   if (state->count == 1) {
     // clear Modifiers, Keys, Macros and Layers
     clear_keyboard();
@@ -48,21 +48,110 @@ void dance_CR_finished (qk_tap_dance_state_t *state, void *user_data) {
   }
 }
 
-void dance_ASTR_finished (qk_tap_dance_state_t *state, void *user_data) {
-  if (state->count == 2) {
-    register_code(KC_LSFT);
-    register_code(KC_8);
-  } else {
-    register_code(KC_I);
+// Double Tap Dance
+void dance_DP_finished (qk_tap_dance_state_t *state, void *user_data) {
+  switch (state->keycode) {
+  case TD(ASTR_DANCE):
+    if (state->count == 2) {
+      register_code(KC_LSFT);
+      register_code(KC_8);
+    } else {
+      register_code(KC_I);
+    }
+    break;
+  case TD(MINS_DANCE):
+    if (state->count == 2) {
+      register_code(KC_LSFT);
+      register_code(KC_MINS);
+    } else {
+      register_code(KC_MINS);
+    }
+    break;
+  case TD(EQL_DANCE):
+    if (state->count == 2) {
+      register_code(KC_LSFT);
+      register_code(KC_EQL);
+    } else {
+      register_code(KC_EQL);
+    }
+    break;
+  case TD(BSLS_DANCE):
+    if (state->count == 2) {
+      register_code(KC_LSFT);
+      register_code(KC_BSLS);
+    } else {
+      register_code(KC_BSLS);
+    }
+    break;
+  case TD(QUOT_DANCE):
+    if (state->count == 2) {
+      register_code(KC_LSFT);
+      register_code(KC_QUOT);
+    } else {
+      register_code(KC_QUOT);
+    }
+    break;
+  case TD(SCLN_DANCE):
+    if (state->count == 2) {
+      register_code(KC_LSFT);
+      register_code(KC_SCLN);
+    } else {
+      register_code(KC_SCLN);
+    }
+    break;
   }
 }
 
-void dance_ASTR_reset (qk_tap_dance_state_t *state, void *user_data) {
-  if (state->count == 2) {
-    unregister_code(KC_LSFT);
-    unregister_code(KC_8);
-  } else {
-    unregister_code(KC_I);
+void dance_DP_reset (qk_tap_dance_state_t *state, void *user_data) {
+  switch (state->keycode) {
+  case TD(ASTR_DANCE):
+    if (state->count == 2) {
+      unregister_code(KC_LSFT);
+      unregister_code(KC_8);
+    } else {
+      unregister_code(KC_I);
+    }
+    break;
+  case TD(MINS_DANCE):
+    if (state->count == 2) {
+      unregister_code(KC_LSFT);
+      unregister_code(KC_MINS);
+    } else {
+      unregister_code(KC_MINS);
+    }
+    break;
+  case TD(EQL_DANCE):
+    if (state->count == 2) {
+      unregister_code(KC_LSFT);
+      unregister_code(KC_EQL);
+    } else {
+      unregister_code(KC_EQL);
+    }
+    break;
+  case TD(BSLS_DANCE):
+    if (state->count == 2) {
+      unregister_code(KC_LSFT);
+      unregister_code(KC_BSLS);
+    } else {
+      unregister_code(KC_BSLS);
+    }
+    break;
+  case TD(QUOT_DANCE):
+    if (state->count == 2) {
+      unregister_code(KC_LSFT);
+      unregister_code(KC_QUOT);
+    } else {
+      unregister_code(KC_QUOT);
+    }
+    break;
+  case TD(SCLN_DANCE):
+    if (state->count == 2) {
+      unregister_code(KC_LSFT);
+      unregister_code(KC_SCLN);
+    } else {
+      unregister_code(KC_SCLN);
+    }
+    break;
   }
 }
 
@@ -143,13 +232,38 @@ void dance_PRN_reset (qk_tap_dance_state_t *state, void *user_data) {
   }
 }
 
-//All tap dance functions would go here. Only showing this one.
+// All tap dance functions would go here. Only showing this one.
 qk_tap_dance_action_t tap_dance_actions[] = {
-  [CR_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, dance_CR_finished, NULL),
-  [ASTR_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, dance_ASTR_finished, dance_ASTR_reset),
+  // Double Tap Dance
+  [CLRE_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, dance_CLRE_finished, NULL),
+  [ASTR_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, dance_DP_finished, dance_DP_reset),
+  [MINS_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, dance_DP_finished, dance_DP_reset),
+  [EQL_DANCE]  = ACTION_TAP_DANCE_FN_ADVANCED (NULL, dance_DP_finished, dance_DP_reset),
+  [BSLS_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, dance_DP_finished, dance_DP_reset),
+  [QUOT_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, dance_DP_finished, dance_DP_reset),
+  [SCLN_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, dance_DP_finished, dance_DP_reset),
+  // Triple Tap Dance
   [LPRN_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED (dance_PRN_tapped, dance_PRN_finished, dance_PRN_reset),
   [RPRN_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED (dance_PRN_tapped, dance_PRN_finished, dance_PRN_reset)
 };
+
+#define CTL_SPC CTL_T(KC_SPC)
+#define CTL_ENT CTL_T(KC_ENT)
+#define OSM_ALT OSM(MOD_LALT)
+#define OSM_SFT OSM(MOD_LSFT)
+#define OSM_CTL OSM(MOD_LCTL)
+#define OSL_LOW OSL(_LOWER)
+#define OSL_RAI OSL(_RAISE)
+#define OSL_QWE OSL(_QWERTY)
+#define TD_CLRE TD(CLRE_DANCE)
+#define TD_ASTR TD(ASTR_DANCE)
+#define TD_MINS TD(MINS_DANCE)
+#define TD_EQL  TD(EQL_DANCE)
+#define TD_BSLS TD(BSLS_DANCE)
+#define TD_QUOT TD(QUOT_DANCE)
+#define TD_SCLN TD(SCLN_DANCE)
+#define TD_LPRN TD(LPRN_DANCE)
+#define TD_RPRN TD(RPRN_DANCE)
 
 // for debug
 /* void keyboard_post_init_user(void) { */
@@ -171,7 +285,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * ,----------------------------------------------------------------------------------------------------------------------.
    * |  Tab |   Q  |   W  |   E  |   R  |   T  |   -  |                    |   =  |   Y  |   U  |   I  |   O  |   P  |  \   |
    * |------+------+------+------+------+------+------+--------------------+------+------+------+------+------+------+------|
-   * | Ctrl |   A  |   S  |   D  |   F  |   G  |   [  |                    |   ]  |   H  |   J  |   K  |   L  |   ;  |  "   |
+   * | Ctrl |   A  |   S  |   D  |   F  |   G  |   [  |                    |   ]  |   H  |   J  |   K  |   L  |   ;  |  '   |
    * |------+------+------+------+------+------+---------------------------+------+------+------+------+------+------+------|
    * | Shift|   Z  |   X  |   C  |   V  |   B  |  Esc |                    |  BSC |   N  |   M  |   ,  |   .  |   /  | Shift|
    * |-------------+------+------+------+------+------+------+------+------+------+------+------+------+------+-------------|
@@ -180,10 +294,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * ,----------------------------------------------------------------------------------------------------------------------.
    */
   [_QWERTY] = LAYOUT( \
-                     KC_TAB,  KC_Q,   KC_W,     KC_E,    KC_R,    KC_T,     KC_MINS,                      KC_EQL,   KC_Y,      KC_U,    TD(ASTR_DANCE),    KC_O,    KC_P,    KC_BSLS, \
-    OSM_LCTL, KC_A,   KC_S,     KC_D,    KC_F,    KC_G,    TD(LPRN_DANCE),               TD(RPRN_DANCE),   KC_H,     KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, \
-    OSM_LSFT, KC_Z,   KC_X,     KC_C,    KC_V,    KC_B,     KC_ESC,                      KC_BSPACE, KC_N,     KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT, \
-    TD(CR_DANCE), RAMEN, OSM_LALT, KC_LCMD,          OSM_LSFT, OSL_LOWER, CTL_SPC, CTL_ENT, OSL_RAISE, OSM_RALT, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT \
+     KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T, TD_MINS,                    TD_EQL,    KC_Y,    KC_U, TD_ASTR,    KC_O,    KC_P, TD_BSLS, \
+    OSM_CTL,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G, TD_LPRN,                   TD_RPRN,    KC_H,    KC_J,    KC_K,    KC_L, TD_SCLN, TD_QUOT, \
+    OSM_SFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,  KC_ESC,                   KC_BSPC,    KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, KC_RSFT, \
+    TD_CLRE,   RAMEN, OSM_ALT, KC_LCMD,          OSM_SFT, OSL_LOW, CTL_SPC, CTL_ENT, OSL_RAI, OSM_ALT,          KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT  \
   ),
 
   /* Lower
@@ -194,15 +308,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * |------+------+------+------+------+------+---------------------------+------+------+------+------+------+------+------|
    * | Shift|   F6 |   F7 |   F8 |   F9 |  F10 |  ESC |                    |  BSC |   6  |   7  |   8  |   9  |   0  | Shift|
    * |-------------+------+------+------+------+------+------+------+------+------+------+------+------+------+-------------|
-   * |      |      |  Alt | Cmd  |||||||| Shift| QWER | Space|||||||| Enter| QWER |   <  ||||||||   ,  |   .  |   >  |   /  |
+   * |      |      |  Alt |  Cmd |||||||| Shift| QWER | Space|||||||| Enter| QWER |  Alt ||||||||      |      |      |      |
    * |      |      |      |      ||||||||      |      | Ctrl |||||||| Ctrl |      |      ||||||||      |      |      |      |
    * ,----------------------------------------------------------------------------------------------------------------------.
    */
   [_LOWER] = LAYOUT(
-    KC_GRV , KC_EXLM, KC_AT,    KC_HASH, KC_DLR,  KC_PERC,  KC_UNDS,                     KC_PLUS,   KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE, \
-    KC_TILD, KC_F1,   KC_F2,    KC_F3,   KC_F4,   KC_F5,    KC_LCBR,                     KC_RCBR,   KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_DQT, \
-    OSM_LSFT, KC_F6,   KC_F7,    KC_F8,   KC_F9,   KC_F10,   KC_ESC,                      KC_BSPACE, KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_RSFT, \
-    _______,   _______,   OSM_LALT, KC_LCMD,          OSM_LSFT, OSL_QWERTY, CTL_SPC, CTL_ENT, OSL_QWERTY, KC_LT,            KC_COMM, KC_DOT,  KC_GT,   KC_SLSH \
+     KC_GRV, KC_EXLM,   KC_AT, KC_HASH,  KC_DLR, KC_PERC, KC_UNDS,                   KC_PLUS, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE, \
+    KC_TILD,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5, KC_LCBR,                   KC_RCBR,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,  KC_DQT, \
+    OSM_SFT,   KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10,  KC_ESC,                   KC_BSPC,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0, KC_RSFT, \
+    _______, _______, OSM_ALT, KC_LCMD,          OSM_SFT, OSL_QWE, CTL_SPC, CTL_ENT, OSL_QWE, OSM_ALT,          _______, _______, _______, _______  \
   ),
 
   /* Raise
@@ -218,10 +332,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   * ,----------------------------------------------------------------------------------------------------------------------.
   */
   [_RAISE] = LAYOUT(
-    KC_GRV,  KC_EXLM, KC_AT,  KC_HASH, KC_DLR, KC_PERC,  KC_UNDS,                     KC_PLUS,   KC_CIRC,  KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE, \
-    KC_TILD, KC_F1,   KC_F2,  KC_F3,   KC_F4,  KC_F5,    KC_LCBR,                     KC_RCBR,   KC_LEFT,  KC_DOWN, KC_UP,   KC_RGHT, KC_COLN, KC_DQT, \
-    OSM_LSFT, KC_F6,   KC_F7,  KC_F8,   KC_F9,  KC_F10,   KC_ESC,                      KC_BSPACE, KC_N,     KC_M,    KC_LT,   KC_GT,   KC_QUES, KC_RSFT, \
-    _______,   KC_F11, KC_F12,  KC_LCMD,         OSM_LSFT, OSL_QWERTY, CTL_SPC, CTL_ENT, OSL_QWERTY, OSM_RALT,          KC_HOME, KC_PGDN, KC_PGUP, KC_END \
+     KC_GRV, KC_EXLM,   KC_AT, KC_HASH,  KC_DLR, KC_PERC, KC_UNDS,                   KC_PLUS, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE, \
+    KC_TILD,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5, KC_LCBR,                   KC_RCBR, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, KC_COLN,  KC_DQT, \
+    OSM_SFT,   KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10,  KC_ESC,                   KC_BSPC,    KC_N,    KC_M,   KC_LT,   KC_GT, KC_QUES, KC_RSFT, \
+    _______,  KC_F11,  KC_F12, KC_LCMD,          OSM_SFT, OSL_QWE, CTL_SPC, CTL_ENT, OSL_QWE, OSM_ALT,          _______, _______, _______, _______  \
   )
 };
 
