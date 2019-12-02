@@ -232,19 +232,28 @@ void dance_PRN_reset (qk_tap_dance_state_t *state, void *user_data) {
   }
 }
 
+// often continuous tapping
+#define CONT_TD_TIME 140
+// sometimes continuous tapping
+#define SOME_TD_TIME 170
+// rarely continuous tapping
+#define RARE_TD_TIME 200
+// triple tap dance
+#define TRIPLE_TD_TIME 160
+
 // All tap dance functions would go here. Only showing this one.
 qk_tap_dance_action_t tap_dance_actions[] = {
   // Double Tap Dance
-  [CLRE_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, dance_CLRE_finished, NULL),
-  [ASTR_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, dance_DP_finished, dance_DP_reset),
-  [MINS_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, dance_DP_finished, dance_DP_reset),
-  [EQL_DANCE]  = ACTION_TAP_DANCE_FN_ADVANCED (NULL, dance_DP_finished, dance_DP_reset),
-  [BSLS_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, dance_DP_finished, dance_DP_reset),
-  [QUOT_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, dance_DP_finished, dance_DP_reset),
-  [SCLN_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, dance_DP_finished, dance_DP_reset),
+  [CLRE_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED_TIME (NULL, dance_CLRE_finished, NULL, RARE_TD_TIME),
+  [ASTR_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED_TIME (NULL, dance_DP_finished, dance_DP_reset, CONT_TD_TIME),
+  [MINS_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED_TIME (NULL, dance_DP_finished, dance_DP_reset, CONT_TD_TIME),
+  [EQL_DANCE]  = ACTION_TAP_DANCE_FN_ADVANCED_TIME (NULL, dance_DP_finished, dance_DP_reset, CONT_TD_TIME),
+  [BSLS_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED_TIME (NULL, dance_DP_finished, dance_DP_reset, SOME_TD_TIME),
+  [QUOT_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED_TIME (NULL, dance_DP_finished, dance_DP_reset, CONT_TD_TIME),
+  [SCLN_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED_TIME (NULL, dance_DP_finished, dance_DP_reset, RARE_TD_TIME),
   // Triple Tap Dance
-  [LPRN_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED (dance_PRN_tapped, dance_PRN_finished, dance_PRN_reset),
-  [RPRN_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED (dance_PRN_tapped, dance_PRN_finished, dance_PRN_reset)
+  [LPRN_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED_TIME (dance_PRN_tapped, dance_PRN_finished, dance_PRN_reset, TRIPLE_TD_TIME),
+  [RPRN_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED_TIME (dance_PRN_tapped, dance_PRN_finished, dance_PRN_reset, TRIPLE_TD_TIME)
 };
 
 #define CTL_SPC CTL_T(KC_SPC)
@@ -295,7 +304,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    */
   [_QWERTY] = LAYOUT( \
      KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T, TD_MINS,                    TD_EQL,    KC_Y,    KC_U, TD_ASTR,    KC_O,    KC_P, TD_BSLS, \
-    OSM_CTL,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G, TD_LPRN,                   TD_RPRN,    KC_H,    KC_J,    KC_K,    KC_L, TD_SCLN, TD_QUOT, \
+    OSM_CTL,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G, TD_LPRN,                   TD_RPRN,    KC_H,    KC_J,    KC_K,    KC_L, TD_SCLN, KC_QUOT, \
     OSM_SFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,  KC_ESC,                   KC_BSPC,    KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, KC_RSFT, \
     TD_CLRE,   RAMEN, OSM_ALT, KC_LCMD,          OSM_SFT, OSL_LOW, CTL_SPC, CTL_ENT, OSL_RAI, OSM_ALT,          KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT  \
   ),
@@ -368,12 +377,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 // TAPPING_TERM for each keycode
+// Tap Dances settings are in tap_dance_actions[]
 uint16_t get_tapping_term(uint16_t keycode){
   switch(keycode){
   case CTL_SPC:
-    return 150;
   case CTL_ENT:
-    return 150;
+    return 200;
+  // 通常キーは80
   default:
     return TAPPING_TERM;
   }
