@@ -21,15 +21,15 @@ enum {
   CLRE_DANCE,
   // once i, twice *
   ASTR_DANCE,
-  // TODO: once -, twice _
+  // once -, twice _
   MINS_DANCE,
-  // TODO: once =, twice +
+  // once =, twice +
   EQL_DANCE,
-  // TODO: once \, twice |
+  // once \, twice |
   BSLS_DANCE,
-  // TODO: once ', twice "
+  // once ', twice "
   QUOT_DANCE,
-  // TODO: once ;, twice :
+  // once ;, twice :
   SCLN_DANCE,
   // once [, twice {, thrice (
   LPRN_DANCE,
@@ -232,25 +232,27 @@ void dance_PRN_reset (qk_tap_dance_state_t *state, void *user_data) {
   }
 }
 
-// often continuous tapping
-#define CONT_TD_TIME 140
-// sometimes continuous tapping
-#define SOME_TD_TIME 170
-// rarely continuous tapping
-#define RARE_TD_TIME 200
+// rarely taps TD
+#define RARELY_TD_TIME 120
+// sometimes taps TD
+#define SOMETIMES_TD_TIME 140
+// often taps TD
+#define OFTEN_TD_TIME 170
+// usually taps TD
+#define USUALLY_TD_TIME 200
 // triple tap dance
 #define TRIPLE_TD_TIME 160
 
 // All tap dance functions would go here. Only showing this one.
 qk_tap_dance_action_t tap_dance_actions[] = {
   // Double Tap Dance
-  [CLRE_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED_TIME (NULL, dance_CLRE_finished, NULL, RARE_TD_TIME),
-  [ASTR_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED_TIME (NULL, dance_DP_finished, dance_DP_reset, CONT_TD_TIME),
-  [MINS_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED_TIME (NULL, dance_DP_finished, dance_DP_reset, CONT_TD_TIME),
-  [EQL_DANCE]  = ACTION_TAP_DANCE_FN_ADVANCED_TIME (NULL, dance_DP_finished, dance_DP_reset, CONT_TD_TIME),
-  [BSLS_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED_TIME (NULL, dance_DP_finished, dance_DP_reset, SOME_TD_TIME),
-  [QUOT_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED_TIME (NULL, dance_DP_finished, dance_DP_reset, CONT_TD_TIME),
-  [SCLN_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED_TIME (NULL, dance_DP_finished, dance_DP_reset, RARE_TD_TIME),
+  [CLRE_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED_TIME (NULL, dance_CLRE_finished, NULL, USUALLY_TD_TIME),
+  [ASTR_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED_TIME (NULL, dance_DP_finished, dance_DP_reset, RARELY_TD_TIME),
+  [MINS_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED_TIME (NULL, dance_DP_finished, dance_DP_reset, SOMETIMES_TD_TIME),
+  [EQL_DANCE]  = ACTION_TAP_DANCE_FN_ADVANCED_TIME (NULL, dance_DP_finished, dance_DP_reset, SOMETIMES_TD_TIME),
+  [BSLS_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED_TIME (NULL, dance_DP_finished, dance_DP_reset, OFTEN_TD_TIME),
+  [QUOT_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED_TIME (NULL, dance_DP_finished, dance_DP_reset, SOMETIMES_TD_TIME),
+  [SCLN_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED_TIME (NULL, dance_DP_finished, dance_DP_reset, USUALLY_TD_TIME),
   // Triple Tap Dance
   [LPRN_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED_TIME (dance_PRN_tapped, dance_PRN_finished, dance_PRN_reset, TRIPLE_TD_TIME),
   [RPRN_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED_TIME (dance_PRN_tapped, dance_PRN_finished, dance_PRN_reset, TRIPLE_TD_TIME)
@@ -304,7 +306,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    */
   [_QWERTY] = LAYOUT( \
      KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T, TD_MINS,                    TD_EQL,    KC_Y,    KC_U, TD_ASTR,    KC_O,    KC_P, TD_BSLS, \
-    OSM_CTL,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G, TD_LPRN,                   TD_RPRN,    KC_H,    KC_J,    KC_K,    KC_L, TD_SCLN, KC_QUOT, \
+    OSM_CTL,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G, TD_LPRN,                   TD_RPRN,    KC_H,    KC_J,    KC_K,    KC_L, TD_SCLN, TD_QUOT, \
     OSM_SFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,  KC_ESC,                   KC_BSPC,    KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, KC_RSFT, \
     TD_CLRE,   RAMEN, OSM_ALT, KC_LCMD,          OSM_SFT, OSL_LOW, CTL_SPC, CTL_ENT, OSL_RAI, OSM_ALT,          KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT  \
   ),
@@ -353,9 +355,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   case RAMEN:
     // print string
     // TODO: ramen emoji
-    SEND_STRING("ramens is perfect food.");
+    SEND_STRING("ramen is perfect food.");
     return false;
-    break;
   case LOWER:
     if (record->event.pressed) {
       layer_on(_LOWER);
@@ -363,7 +364,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       layer_off(_LOWER);
     }
     return false;
-    break;
   case RAISE:
     if (record->event.pressed) {
       layer_on(_RAISE);
@@ -371,7 +371,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       layer_off(_RAISE);
     }
     return false;
-    break;
   }
   return true;
 }
