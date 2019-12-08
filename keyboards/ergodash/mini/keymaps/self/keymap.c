@@ -381,7 +381,7 @@ uint16_t get_tapping_term(uint16_t keycode){
   switch(keycode){
   case CTL_SPC:
   case CTL_ENT:
-    return 200;
+    return 170;
   // 通常キーは80
   default:
     return TAPPING_TERM;
