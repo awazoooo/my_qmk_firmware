@@ -26,14 +26,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 //#define MASTER_LEFT
 #define MASTER_RIGHT
-// #define EE_HANDS
+//#define EE_HANDS
 
 #define SSD1306OLED
 
 #define USE_SERIAL_PD2
 
-#define ONESHOT_TAP_TOGGLE 99999
-#define ONESHOT_TIMEOUT 5000
+// lock mod key
+#define ONESHOT_TAP_TOGGLE 2
+#define ONESHOT_TIMEOUT 99999
 
 /* define tapping term */
 #define TAPPING_TERM 80
